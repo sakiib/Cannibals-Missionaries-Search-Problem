@@ -9,12 +9,16 @@ struct State {
   bool operator == (const State & st) const {
     return st.miss == miss && st.cann == cann && st.side == side;
   }
+  bool operator != (const State & st) const {
+    return st.miss != miss || st.cann != cann || st.side != side;
+  }
 };
 
 const int CAP = 2;
-const int N = 500;
 const int Missionaries = 3;
 const int Cannibals = 3;
+const int N = Missionaries * 100 + Cannibals * 10 + 1 + 1;
+
 const State startState = State(Missionaries, Cannibals, 0);
 const State endState = State(Missionaries, Cannibals, 1);
 
@@ -28,6 +32,7 @@ bool valid(State st) {
 }
 
 int getHashFromState(State curState) {
+  assert(curState.miss * 100 + curState.cann * 10 + curState.side < N);
   return (curState.miss * 100 + curState.cann * 10 + curState.side);
 }
 
@@ -38,6 +43,9 @@ State getStateFromHash(int hash_value) {
   st.cann = hash_value % 10;
   hash_value /= 10;
   st.miss = hash_value;
+  assert(st.miss >= 0 && st.miss <= Missionaries);
+  assert(st.cann >= 0 && st.cann <= Cannibals);
+  assert(st.side == 0 || st.side == 1);
   return st;
 }
 
@@ -53,6 +61,10 @@ void buildGraph(State curState) {
       if (c + m > 0 && (m + c <= CAP && (m == 0 || m >= c)) && valid(State(curState.miss - m, curState.cann - c, curState.side ^ 1))) {
         State nextState = State(3 - curState.miss + m, 3 - curState.cann + c, curState.side ^ 1);
         if (valid(nextState)) {
+          assert(curState != nextState);
+          assert(curState.side != nextState.side);
+          assert(nextState.miss >= 0 && nextState.miss <= Missionaries);
+          assert(nextState.cann >= 0 && nextState.cann <= Cannibals);
           graph[getHashFromState(curState)].push_back(getHashFromState(nextState));
           buildGraph(nextState);
         }
@@ -80,6 +92,7 @@ void bfs(State curState) {
     }
   }
 
+  assert(cost[getHashFromState(endState)] != -1);
   cout << "steps: " << cost[getHashFromState(endState)] << "\n";
 }
 
