@@ -23,7 +23,7 @@ vector <int> graph[N];
 int cost[N];
 int path[N];
 
-bool Valid(State st) {
+bool valid(State st) {
   return (st.miss == 0 || st.miss >= st.cann);
 }
 
@@ -50,9 +50,9 @@ void buildGraph(State curState) {
 
   for (int m = 0; m <= curState.miss; m++) {
     for (int c = 0; c <= curState.cann; c++) {
-      if (c + m > 0 && (m + c <= CAP && (m == 0 || m >= c)) && Valid(State(curState.miss - m, curState.cann - c, curState.side ^ 1))) {
+      if (c + m > 0 && (m + c <= CAP && (m == 0 || m >= c)) && valid(State(curState.miss - m, curState.cann - c, curState.side ^ 1))) {
         State nextState = State(3 - curState.miss + m, 3 - curState.cann + c, curState.side ^ 1);
-        if (Valid(nextState)) {
+        if (valid(nextState)) {
           graph[getHashFromState(curState)].push_back(getHashFromState(nextState));
           buildGraph(nextState);
         }
