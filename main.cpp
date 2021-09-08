@@ -59,7 +59,7 @@ void buildGraph(State curState) {
   for (int m = 0; m <= curState.miss; m++) {
     for (int c = 0; c <= curState.cann; c++) {
       if (c + m > 0 && (m + c <= CAP && (m == 0 || m >= c)) && valid(State(curState.miss - m, curState.cann - c, curState.side ^ 1))) {
-        State nextState = State(3 - curState.miss + m, 3 - curState.cann + c, curState.side ^ 1);
+        State nextState = State(Missionaries - curState.miss + m, Cannibals - curState.cann + c, curState.side ^ 1);
         if (valid(nextState)) {
           assert(curState != nextState);
           assert(curState.side != nextState.side);
@@ -99,9 +99,9 @@ void bfs(State curState) {
 void printMoves(State curState) {
   if (path[getHashFromState(curState)] == 0) {
     if (curState.side == 0) {
-      cout << curState.miss << "M " << curState.cann << "C ========== " << 3 - curState.miss << "M " << 3 - curState.cann << "C" << "\n";
+      cout << curState.miss << "M " << curState.cann << "C ========== " << Missionaries - curState.miss << "M " << Cannibals - curState.cann << "C" << "\n";
     } else {
-      cout << 3 - curState.miss << "M " << 3 - curState.cann << "C | " << curState.miss << "M " << curState.cann << "C" << "\n";
+      cout << Missionaries - curState.miss << "M " << Cannibals - curState.cann << "C | " << curState.miss << "M " << curState.cann << "C" << "\n";
     }
     return;
   }
@@ -109,9 +109,9 @@ void printMoves(State curState) {
   printMoves(getStateFromHash(path[getHashFromState(curState)]));
   
   if (curState.side == 0) {
-    cout << curState.miss << "M " << curState.cann << "C <========= " << 3 - curState.miss << "M " << 3 - curState.cann << "C" << "\n";
+    cout << curState.miss << "M " << curState.cann << "C <========= " << Missionaries - curState.miss << "M " << Cannibals - curState.cann << "C" << "\n";
   } else {
-    cout << 3 - curState.miss << "M " << 3 - curState.cann << "C =========> " << curState.miss << "M " << curState.cann << "C" << "\n";
+    cout << Missionaries - curState.miss << "M " << Cannibals - curState.cann << "C =========> " << curState.miss << "M " << curState.cann << "C" << "\n";
   }
 }
 
