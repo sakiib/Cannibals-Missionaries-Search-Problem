@@ -6,10 +6,10 @@ struct State {
   State(): miss(-1), cann(-1), side(-1) {}
   State(int miss, int cann, int side): miss(miss), cann(cann), side(side) {}
 
-  bool operator == (const State & st) const {
+  bool operator == (const State &st) const {
     return st.miss == miss && st.cann == cann && st.side == side;
   }
-  bool operator != (const State & st) const {
+  bool operator != (const State &st) const {
     return st.miss != miss || st.cann != cann || st.side != side;
   }
 };
